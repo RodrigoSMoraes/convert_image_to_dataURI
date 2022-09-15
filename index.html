@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" name="" id="pic-upload" data-url = "" accept=".gif,.jpg,.jpeg,.png">
+    <br>
+    <p>selecione uma imagem </p>
+    <br>
+    <button id="pic-enviar">upload</button>
+    <p id="text-enviar"></p>
+    <br>    
+    <p id="text"></p>
+    <br>    
+    <img src="" id="profileImg" style="width:200px; border:solid 1px">
+
+   
+    
+
+    <script>	
+
+        $("#pic-upload").on('change', function(){            
+            let file = $(this).prop("files")[0];            
+            let reader = new FileReader();
+            console.log(file.size)
+            if(file.size < 300000){    
+                reader.onload = function(){
+                    let newImageProfile = reader.result;                
+                    $("#pic-upload").attr('data-url', newImageProfile);    
+                    $("#profileImg").attr('src', newImageProfile);                
+                    console.log(file);                    
+                    console.log(reader);
+                    
+                }
+                reader.readAsDataURL(file);
+            }else{
+                $("#text").text("imagem maior que 300kb, escolha outra imagem");
+               
+            }
+        });
+
+   
+ 
+
+
+
+
+	$("#pic-enviar").off("click").on("click", function(){
+        let imageBase64 = $("#pic-upload").attr('data-url');
+        if(imageBase64 != ""){
+            let data = {
+            
+                picture: imageBase64
+            }
+            $("#text").text(imageBase64);
+            console.log("data: ", data);
+        }else{
+            $("#text").text("Você não carregou nenhuma imagem");
+        }
+	    
+	
+
+
+      
+    	}); 
+        
+        
+       
+        
+       //função converte image object in data URI
+        function toDataURL(src, callback){
+           var image = new Image();
+           image.crossOrigin = 'Anonymous';
+           image.onload = function(){
+              var canvas = document.createElement('canvas');
+              var context = canvas.getContext('2d');
+              canvas.height = this.naturalHeight;
+              canvas.width = this.naturalWidth;
+              context.drawImage(this, 0, 0);
+              var dataURL = canvas.toDataURL('image/jpeg');
+              callback(dataURL);
+           };
+           image.src = src;
+        }
+
+        
+
+     
+        //chamada da função
+        //toDataURL(url_img, function(dataURL){
+        //    $("#text").text(reader.result);
+        //    $("#myImg").attr('src', reader.result);
+        //    
+        //})
+
+        
+       
+     </script>
+</body>
+</html>
